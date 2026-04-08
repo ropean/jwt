@@ -772,22 +772,26 @@
   }
 
   function loadExample() {
-    // Example token with iat, exp, sub, iss, name claims (exp in the future)
-    const futureExp = Math.floor(Date.now() / 1000) + 3600;
-    const header  = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+    // Example Access Token matching sso.ropean.org token spec (RS256, per integration guide)
+    const now = Math.floor(Date.now() / 1000);
+    const header  = btoa(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
     const payloadObj = {
-      sub: '1234567890',
+      iss: 'https://sso.ropean.org/oauth',
+      sub: 'usr_9f8e7d6c5b4a3210',
+      aud: 'client_a1b2c3d4e5f67890',
+      scope: 'openid profile email',
+      role: 'user',
+      org_id: 'org_1234567890abcdef',
+      username: 'jane.doe',
       name: 'Jane Doe',
-      iss: 'https://auth.example.com',
-      aud: 'myapp',
-      iat: Math.floor(Date.now() / 1000),
-      exp: futureExp,
-      jti: 'abc-123-xyz',
-      admin: true
+      email: 'jane.doe@example.com',
+      iat: now,
+      exp: now + 900,   // 15-minute access token (default lifetime per spec)
+      jti: 'tok_abc123xyz456def'
     };
     const payload = btoa(JSON.stringify(payloadObj)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
-    // Signature is fake — this is a decode-only tool
-    const sig = 'SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+    // Signature is illustrative — this tool decodes only, it does not verify
+    const sig = 'RS256_signature_verify_via_jwks_at_sso_ropean_org';
     document.getElementById('jwt-input').value = `${header}.${payload}.${sig}`;
     decode();
   }

@@ -1,0 +1,51 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  CUSTOM_DOMAIN: jwt.ropean.org
+  BRANCH: gh-pages
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare deploy directory
+        run: |
+          # Mirror deploy.sh: copy only the files we want to publish
+          mkdir -p /tmp/deploy
+
+          # Write CNAME (mirrors: echo "$CUSTOM_DOMAIN" > "$BUILD_DIR/CNAME")
+          echo "$CUSTOM_DOMAIN" > /tmp/deploy/CNAME
+
+          # Copy required artifact
+          cp index.html /tmp/deploy/
+
+          # Optional assets — copy only if they exist (mirrors the for loop in deploy.sh)
+          for asset in *.css *.js *.png *.svg *.ico; do
+            [ -f "$asset" ] && cp "$asset" /tmp/deploy/ || true
+          done
+
+          echo "Files to deploy:"
+          ls -la /tmp/deploy/
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: ${{ env.BRANCH }}
+          publish_dir: /tmp/deploy
+          cname: ${{ env.CUSTOM_DOMAIN }}
+          commit_message: "deploy: ${{ github.sha }}"
+          force_orphan: true
