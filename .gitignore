@@ -1,0 +1,99 @@
+# ── Project-specific ─────────────────────────────────────
+.claude/settings.local.json
+CNAME
+.vite/
+
+# ── macOS ─────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+Icon\r
+.AppleDesktop
+.com.apple.timemachine.donotpresent
+.fseventsd
+
+# ── Windows ───────────────────────────────────────────────
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+# ── Linux ─────────────────────────────────────────────────
+*~
+.nfs*
+
+# ── Node.js ───────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.pnp.*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ── Build outputs ─────────────────────────────────────────
+dist/
+build/
+out/
+.output/
+.nuxt/
+.next/
+.cache/
+.parcel-cache/
+.turbo/
+
+# ── Environment & secrets ─────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+secrets/
+
+# ── Editors: VS Code ──────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# ── Editors: JetBrains ────────────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ── Editors: Vim / Neovim ─────────────────────────────────
+*.swp
+*.swo
+*.swn
+[._]*.un~
+Session.vim
+.netrwhist
+
+# ── Editors: Emacs ────────────────────────────────────────
+*#
+.#*
+\#*#
+
+# ── Logs & temp ───────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
