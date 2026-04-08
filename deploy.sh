@@ -29,28 +29,17 @@ echo ""
 # ── Write CNAME ──────────────────────────────────────────────────────────────
 echo "$CUSTOM_DOMAIN" > "$BUILD_DIR/CNAME"
 
-# ── Prepare orphan gh-pages branch in tmp dir ────────────────────────────────
-git clone --depth=1 "$REPO_URL" "$TMP_DIR" 2>/dev/null || true
-
+# ── Prepare a fresh orphan repo in tmp dir ───────────────────────────────────
 cd "$TMP_DIR"
-
-# Switch to gh-pages branch (create orphan if it doesn't exist)
-if git ls-remote --exit-code --heads origin "$BRANCH" &>/dev/null; then
-  git fetch origin "$BRANCH"
-  git checkout "$BRANCH"
-  # Remove everything (we'll replace with fresh build)
-  git rm -rf . --quiet 2>/dev/null || true
-else
-  git checkout --orphan "$BRANCH"
-  git rm -rf . --quiet 2>/dev/null || true
-fi
+git init -q
+git remote add origin "$REPO_URL"
 
 # ── Copy build artifacts ──────────────────────────────────────────────────────
 cp "$BUILD_DIR/index.html" .
 cp "$BUILD_DIR/CNAME" .
 
 # Optional: copy any other assets if they exist
-for asset in "$BUILD_DIR"/*.css "$BUILD_DIR"/*.js "$BUILD_DIR"/*.png "$BUILD_DIR"/*.svg; do
+for asset in "$BUILD_DIR"/*.css "$BUILD_DIR"/*.js "$BUILD_DIR"/*.png "$BUILD_DIR"/*.svg "$BUILD_DIR"/*.ico; do
   [ -f "$asset" ] && cp "$asset" . || true
 done
 
@@ -62,7 +51,7 @@ if git diff --cached --quiet; then
   echo "Nothing changed — already up to date."
 else
   git commit -m "$COMMIT_MSG"
-  git push origin "$BRANCH"
+  git push --force origin "HEAD:$BRANCH"
   echo ""
   echo "✓ Deployed successfully!"
   echo "  Live at: https://$CUSTOM_DOMAIN"
