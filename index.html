@@ -736,7 +736,7 @@
         const expired = isExp && val * 1000 < now;
 
         const badge = isExp
-          ? `<span class="badge ${expired ? 'badge-expired' : 'badge-valid'}">${expired ? 'Expired' : 'Valid'}</span><br>`
+          ? `<span class="badge ${expired ? 'badge-expired' : 'badge-valid'}">${expired ? 'Expired' : 'Valid'}</span>`
           : '';
 
         valueCell = `
@@ -784,9 +784,9 @@
       org_id: 'org_1234567890abcdef',
       username: 'jane.doe',
       name: 'Jane Doe',
-      email: 'jane.doe@example.com',
+      email: 'jane.doe@ropean.org',
       iat: now,
-      exp: now + 900,   // 15-minute access token (default lifetime per spec)
+      exp: now - 900,   // 15-minute access token (default lifetime per spec)
       jti: 'tok_abc123xyz456def'
     };
     const payload = btoa(JSON.stringify(payloadObj)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
